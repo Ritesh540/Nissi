@@ -74,13 +74,10 @@ h1 {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-10px); }
 }
-
 .gallery img.show {
     animation: floatIn 1s ease forwards, floatUpDown 3s ease-in-out infinite;
     box-shadow: 0 0 15px pink, 0 0 25px #ff4d6d;
 }
-
-/* Hover effect */
 .gallery img:hover {
     transform: scale(1.15) rotate(-2deg);
     box-shadow: 0 0 25px pink, 0 0 50px #ff99aa;
@@ -93,9 +90,7 @@ h1 {
     font-size: 22px;
     animation: float 5s linear infinite;
 }
-@keyframes float {
-    to { transform: translateY(-100vh); opacity: 0; }
-}
+@keyframes float { to { transform: translateY(-100vh); opacity: 0; } }
 
 /* Sparkles */
 .sparkle {
@@ -131,69 +126,31 @@ h1 {
     opacity: 0;
     transition: 2s;
 }
-.ending.show {
-    opacity: 1;
-}
+.ending.show { opacity: 1; }
+.big-heart { font-size: 100px; animation: boom 1s ease forwards; }
+@keyframes boom { 0% { transform: scale(0); } 100% { transform: scale(1.5); } }
 
-/* Big heart explosion */
-.big-heart {
-    font-size: 100px;
-    animation: boom 1s ease forwards;
-}
-@keyframes boom {
-    0% { transform: scale(0); }
-    100% { transform: scale(1.5); }
-}
-
-/* Overlay for click/tap start */
+/* Overlay for start */
 #overlay {
-    position: fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background:black;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    color:white;
-    font-size:24px;
-    z-index:1000;
-    cursor:pointer;
-    text-align:center;
-    padding:20px;
-    animation: glowText 2s infinite alternate;
+    position: fixed; top:0; left:0; width:100%; height:100%;
+    background:black; display:flex; justify-content:center; align-items:center;
+    color:white; font-size:24px; z-index:1000; cursor:pointer;
+    text-align:center; padding:20px; animation: glowText 2s infinite alternate;
     flex-direction: column;
 }
+@keyframes glowText { from { text-shadow: 0 0 10px pink; } to { text-shadow: 0 0 25px #ff4d6d; } }
 
-/* Glowing overlay text */
-@keyframes glowText {
-    from { text-shadow: 0 0 10px pink; }
-    to { text-shadow: 0 0 25px #ff4d6d; }
-}
-
-/* Start button fallback */
 #startBtn {
-    margin-top: 20px;
-    padding: 12px 25px;
-    font-size: 20px;
-    border-radius: 12px;
-    border: none;
-    background: pink;
-    color: black;
-    cursor: pointer;
-    box-shadow: 0 0 15px #ff4d6d;
+    margin-top: 20px; padding: 12px 25px; font-size: 20px;
+    border-radius: 12px; border: none; background: pink; color: black;
+    cursor: pointer; box-shadow: 0 0 15px #ff4d6d;
 }
-#startBtn:hover {
-    box-shadow: 0 0 25px pink, 0 0 50px #ff99aa;
-}
+#startBtn:hover { box-shadow: 0 0 25px pink, 0 0 50px #ff99aa; }
 </style>
 </head>
 
 <body>
-
 <h1>HEY NISSI ❤️</h1>
-
 <div id="message"></div>
 
 <div class="gallery">
@@ -214,10 +171,9 @@ h1 {
     <source src="song.mp3" type="audio/mp3">
 </audio>
 
-<!-- Overlay -->
 <div id="overlay">
-    💖 Click anywhere to enter into my heart 💖
-    <button id="startBtn">Start Music 🎵</button>
+    💖 Open my princess, the surprise awaits 💖
+    <button id="startBtn">💖 Open My Heart 💖</button>
 </div>
 
 <script>
@@ -242,21 +198,18 @@ document.addEventListener("DOMContentLoaded", () => {
     let shown = [];
 
     function startExperience() {
-        audio.play().catch(() => {
-            alert("Tap the button again to allow music");
-        });
+        audio.play().catch(()=>alert("Tap the button again to allow music"));
         overlay.style.display = "none";
     }
 
     overlay.addEventListener("click", startExperience);
     startBtn.addEventListener("click", startExperience);
 
-    // Timeline syncing
+    // Timeline
     audio.ontimeupdate = () => {
         let current = Math.floor(audio.currentTime);
-
-        timeline.forEach((line, index) => {
-            if (current >= line.time && !shown.includes(index)) {
+        timeline.forEach((line,index)=>{
+            if(current >= line.time && !shown.includes(index)){
                 shown.push(index);
                 const div = document.createElement("div");
                 div.classList.add("line");
@@ -266,21 +219,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 setTimeout(()=> div.classList.add("show"),100);
             }
         });
-
-        // Show gallery
         if(current >= 50){
             document.querySelectorAll(".gallery img").forEach((img,i)=>{
-                setTimeout(()=>img.classList.add("show"), i*700);
+                setTimeout(()=> img.classList.add("show"), i*700);
             });
         }
-
-        // Show ending
         if(current >= 65){
             document.getElementById("ending").classList.add("show");
         }
     };
 
-    // Floating hearts
+    // Hearts
     setInterval(()=>{
         let heart = document.createElement("div");
         heart.innerHTML="💖";
@@ -290,17 +239,17 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(()=>heart.remove(),5000);
     },300);
 
-    // Random sparkles
+    // Sparkles
     setInterval(()=>{
         let sparkle = document.createElement("div");
         sparkle.classList.add("sparkle");
         sparkle.style.left = Math.random()*100+"vw";
         sparkle.style.top = Math.random()*100+"vh";
-        sparkle.style.width = Math.random()*6 + 4 + "px";
+        sparkle.style.width = Math.random()*6+4+"px";
         sparkle.style.height = sparkle.style.width;
         document.body.appendChild(sparkle);
         setTimeout(()=>sparkle.remove(),3000);
-    }, 200);
+    },200);
 });
 </script>
 
