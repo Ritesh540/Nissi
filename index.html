@@ -141,6 +141,14 @@ h1 {
     z-index:1000;
     cursor:pointer;
     text-align:center;
+    padding:20px;
+    animation: glowText 2s infinite alternate;
+}
+
+/* Glowing overlay text */
+@keyframes glowText {
+    from { text-shadow: 0 0 10px pink; }
+    to { text-shadow: 0 0 25px #ff4d6d; }
 }
 </style>
 </head>
@@ -171,8 +179,8 @@ h1 {
     <source src="song.mp3" type="audio/mp3">
 </audio>
 
-<!-- Full-page overlay -->
-<div id="overlay">💖 Tap anywhere to start the magic 💖</div>
+<!-- Full-page romantic overlay -->
+<div id="overlay">💖 Click anywhere to enter into my heart 💖</div>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
