@@ -6,20 +6,21 @@
 
     <style>
         body {
-            background: linear-gradient(to bottom, #fff0f5, #ffe4e1);
+            margin: 0;
             font-family: 'Segoe UI', sans-serif;
             text-align: center;
-            padding: 30px;
-            color: #333;
+            background: linear-gradient(135deg, #fff0f5, #ffe4e1);
+            overflow-x: hidden;
         }
 
         .card {
             background: white;
             padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             max-width: 500px;
-            margin: auto;
+            margin: 80px auto;
+            animation: fadeIn 2s ease;
         }
 
         h1 {
@@ -29,19 +30,48 @@
 
         p {
             font-size: 18px;
-            line-height: 1.6;
+            line-height: 1.7;
+            color: #444;
         }
 
+        /* Fade animation */
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+
+        /* Floating hearts */
         .heart {
-            font-size: 24px;
+            position: fixed;
+            bottom: -10px;
+            font-size: 20px;
+            animation: floatUp 6s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            background: #ff4d6d;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 
 <body>
 
-<div class="card">
+<!-- Music Button -->
+<button onclick="playMusic()">Play Music 🎵</button>
 
+<div class="card">
     <h1>HEY NISSI ❤️</h1>
 
     <p>
@@ -63,8 +93,32 @@
         Yours always,<br>
         Ritesh ❤️
     </p>
-
 </div>
+
+<!-- Background Music -->
+<audio id="bgMusic" loop>
+    <source src="https://www2.cs.uic.edu/~i101/SoundFiles/StarWars60.wav" type="audio/wav">
+</audio>
+
+<script>
+    function playMusic() {
+        document.getElementById("bgMusic").play();
+    }
+
+    // Generate floating hearts
+    setInterval(() => {
+        let heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = "❤️";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = (15 + Math.random() * 20) + "px";
+        document.body.appendChild(heart);
+
+        setTimeout(() => {
+            heart.remove();
+        }, 6000);
+    }, 300);
+</script>
 
 </body>
 </html>
