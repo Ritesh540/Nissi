@@ -91,7 +91,6 @@ h1 {
 @keyframes glowText { from { text-shadow: 0 0 10px pink; } to { text-shadow:0 0 25px #ff4d6d; } }
 #startBtn { margin-top:20px; padding:12px 25px; font-size:20px; border-radius:12px; border:none; background:pink; color:black; cursor:pointer; box-shadow:0 0 15px #ff4d6d; }
 #startBtn:hover { box-shadow:0 0 25px pink,0 0 50px #ff99aa; }
-
 </style>
 </head>
 <body>
@@ -152,8 +151,14 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    overlay.addEventListener("click", startExperience);
-    startBtn.addEventListener("click", startExperience);
+    // Overlay click triggers experience if user clicks outside button
+    overlay.addEventListener("click", () => startExperience());
+
+    // Button click triggers experience and stops bubbling to overlay
+    startBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        startExperience();
+    });
 
     // Timeline
     audio.ontimeupdate = () => {
