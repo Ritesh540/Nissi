@@ -58,11 +58,29 @@ h1 {
     height: 200px;
     border-radius: 20px;
     opacity: 0;
-    transition: 1s;
+    transition: 0.8s ease, transform 0.5s ease, box-shadow 0.5s ease;
 }
+
+/* Slide in animation */
+@keyframes floatIn {
+    0% { transform: translateY(50px) scale(0.8); opacity: 0; }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* Gentle floating after appearing */
+@keyframes floatUpDown {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
 .gallery img.show {
-    opacity: 1;
-    transform: scale(1.1);
+    animation: floatIn 1s ease forwards, floatUpDown 3s ease-in-out infinite;
+}
+
+/* Hover effect */
+.gallery img:hover {
+    transform: scale(1.15) rotate(-2deg);
+    box-shadow: 0 0 25px pink, 0 0 50px #ff4d6d;
 }
 
 /* Floating hearts */
@@ -106,6 +124,24 @@ h1 {
     0% { transform: scale(0); }
     100% { transform: scale(1.5); }
 }
+
+/* Start button */
+#startBtn {
+    font-size: 20px;
+    padding: 10px 20px;
+    margin-top: 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    background: #ff4d6d;
+    color: white;
+    box-shadow: 0 0 15px pink;
+    transition: 0.3s;
+}
+#startBtn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px pink, 0 0 50px #ff99aa;
+}
 </style>
 </head>
 
@@ -116,10 +152,11 @@ h1 {
 <div id="message"></div>
 
 <div class="gallery">
-    <img src="photo1.jpg.jpeg">
-    <img src="photo2.jpg.jpeg">
-    <img src="photo3.jpg.jpeg">
-    <img src="photo4.jpg.jpeg">
+    <img src="photo1.jpg">
+    <img src="photo2.jpg">
+    <img src="photo3.jpg">
+    <img src="photo4.jpg">
+    <img src="photo5.jpg">
 </div>
 
 <!-- Ending Screen -->
@@ -129,78 +166,80 @@ h1 {
     <div>I love you my princess 👑❤️</div>
 </div>
 
-<audio id="bgMusic" controls>
-    <source src="song.mp3.mp3" type="audio/mp3">
+<!-- Audio -->
+<audio id="bgMusic">
+    <source src="song.mp3" type="audio/mp3">
 </audio>
 
+<!-- Click-to-start button -->
+<button id="startBtn">Click to Start 🎵</button>
+
 <script>
+document.addEventListener("DOMContentLoaded", () => {
+    const audio = document.getElementById("bgMusic");
+    const container = document.getElementById("message");
+    const startBtn = document.getElementById("startBtn");
 
-const audio = document.getElementById("bgMusic");
-const container = document.getElementById("message");
-
-// 🎵 PERFECT TIMELINE (Adjust if needed)
-const timeline = [
-    { time: 3, text: "I’ve been trying to find the right words for you," },
-    { time: 7, text: "but honestly… nothing ever feels enough..." },
-
-    { time: 12, text: "From the day you came into my life," },
-    { time: 16, text: "everything started feeling more meaningful." },
-
-    { time: 22, text: "YOU ARE TRULY THE PRINCESS OF MY HEART 👑", highlight: true },
-
-    { time: 28, text: "Your smile fixes my worst days," },
-    { time: 32, text: "and your presence brings me peace." },
-
-    { time: 38, text: "I really cherish you more than words can explain." },
-
-    { time: 45, text: "Stay the same amazing person always 💫" }
-];
-
-let shown = [];
-
-audio.ontimeupdate = () => {
-    let current = Math.floor(audio.currentTime);
-
-    // Show lines synced
-    timeline.forEach((line, index) => {
-        if (current >= line.time && !shown.includes(index)) {
-            shown.push(index);
-
-            const div = document.createElement("div");
-            div.classList.add("line");
-            if (line.highlight) div.classList.add("highlight");
-
-            div.innerText = line.text;
-            container.appendChild(div);
-
-            setTimeout(() => div.classList.add("show"), 100);
-        }
+    startBtn.addEventListener("click", () => {
+        audio.play();
+        startBtn.style.display = "none";
     });
 
-    // Show gallery at peak
-    if (current >= 50) {
-        document.querySelectorAll(".gallery img").forEach((img, i) => {
-            setTimeout(() => img.classList.add("show"), i * 700);
+    const timeline = [
+        { time: 3, text: "I’ve been trying to find the right words for you," },
+        { time: 7, text: "but honestly… nothing ever feels enough..." },
+        { time: 12, text: "From the day you came into my life," },
+        { time: 16, text: "everything started feeling more meaningful." },
+        { time: 22, text: "YOU ARE TRULY THE PRINCESS OF MY HEART 👑", highlight: true },
+        { time: 28, text: "Your smile fixes my worst days," },
+        { time: 32, text: "and your presence brings me peace." },
+        { time: 38, text: "I really cherish you more than words can explain." },
+        { time: 45, text: "Stay the same amazing person always 💫" }
+    ];
+
+    let shown = [];
+
+    audio.ontimeupdate = () => {
+        let current = Math.floor(audio.currentTime);
+
+        timeline.forEach((line, index) => {
+            if (current >= line.time && !shown.includes(index)) {
+                shown.push(index);
+
+                const div = document.createElement("div");
+                div.classList.add("line");
+                if (line.highlight) div.classList.add("highlight");
+                div.innerText = line.text;
+                container.appendChild(div);
+
+                setTimeout(() => div.classList.add("show"), 100);
+            }
         });
-    }
 
-    // 🎬 FINAL SURPRISE ENDING
-    if (current >= 65) {
-        document.getElementById("ending").classList.add("show");
-    }
-};
+        // Show gallery with stagger
+        if (current >= 50) {
+            document.querySelectorAll(".gallery img").forEach((img, i) => {
+                setTimeout(() => img.classList.add("show"), i * 700);
+            });
+        }
 
-// Floating hearts
-setInterval(() => {
-    let heart = document.createElement("div");
-    heart.innerHTML = "💖";
-    heart.classList.add("heart");
-    heart.style.left = Math.random() * 100 + "vw";
-    document.body.appendChild(heart);
+        // Show ending
+        if (current >= 65) {
+            document.getElementById("ending").classList.add("show");
+        }
+    };
 
-    setTimeout(() => heart.remove(), 5000);
-}, 300);
+    // Floating hearts
+    setInterval(() => {
+        let heart = document.createElement("div");
+        heart.innerHTML = "💖";
+        heart.classList.add("heart");
+        heart.style.left = Math.random() * 100 + "vw";
+        document.body.appendChild(heart);
 
+        setTimeout(() => heart.remove(), 5000);
+    }, 300);
+});
 </script>
 
 </body>
